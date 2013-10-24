@@ -10,6 +10,8 @@ fi
 
 data_root=$1
 
+# Any paths list as part of sacred_paths will be checked against $data_root
+# if there is a match, the script aborts
 sacred_roots="/data/feder /Volumes/Dark_Matter/feder /home/faculty/matt.craig/sacred"
 for path in $sacred_roots; do
     if [[ "$data_root" -ef "$path" ]]; then
