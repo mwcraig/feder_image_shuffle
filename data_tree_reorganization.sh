@@ -10,6 +10,13 @@ fi
 
 data_root=$1
 
+sacred_roots="/data/feder /Volumes/Dark_Matter/feder /home/faculty/matt.craig/sacred"
+for path in $sacred_roots; do
+    if [[ "$data_root" -ef "$path" ]]; then
+        echo "I REFUSE TO TOUCH ACTUAL DATA DIRECTORIES RIGHT NOW"
+        exit 1
+    fi
+done
 # function to set permissions on newly created directories
 
 set_write_permissions () {
