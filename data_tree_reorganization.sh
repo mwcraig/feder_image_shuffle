@@ -22,21 +22,18 @@ set_write_permissions () {
 # function to color code text output
 
 color_text () {
-    red='\e[1;31m'
-    green='\e[32m'
-    blue='\e[1;34m'
-    endColor='\e[0m'
+    endColor=$'\e[0m'
     color=$1
     msg=$2
     case $1 in
         "red" )
-        startColor=$red
+        startColor=$'\e[1;31m'
         ;;
         "green" )
-        startColor=$green
+        startColor=$'\e[32m'
         ;;
         "blue" )
-        startColor=$blue
+        startColor=$'\e[1;34m'
         ;;
         * )
         echo "I do not know the color $1"
