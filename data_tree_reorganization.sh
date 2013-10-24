@@ -14,9 +14,9 @@ data_root=$1
 
 set_write_permissions () {
     directory=$1   # this $1 is the first argument to the function, not the first command line arg...
-    chown :feder $directory || echo "Group ownership of directory $directory not changed (should be feder group)"
-    chmod ug+w $directory || echo "User+group write permissions of directory $directory not changed (should be ug+w)"
-    chmod o-w $directory || echo "Other write permissions of directory $directory not changed (should be o-w)"    
+    chown :feder $directory || color_text red "Group ownership of directory $directory not changed (should be feder group)"
+    chmod ug+w $directory || color_text red "User+group write permissions of directory $directory not changed (should be ug+w)"
+    chmod o-w $directory || color_text red "Other write permissions of directory $directory not changed (should be o-w)"    
 }
 
 # function to color code text output
