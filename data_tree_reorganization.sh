@@ -10,23 +10,7 @@ fi
 
 data_root=$1
 
-# Any paths list as part of sacred_paths will be checked against $data_root
-# if there is a match, the script aborts
-sacred_roots="/data/feder /Volumes/Dark_Matter/feder /home/faculty/matt.craig/sacred"
-for path in $sacred_roots; do
-    if [[ "$data_root" -ef "$path" ]]; then
-        echo "I REFUSE TO TOUCH ACTUAL DATA DIRECTORIES RIGHT NOW"
-        exit 1
-    fi
-done
-# function to set permissions on newly created directories
-
-set_write_permissions () {
-    directory=$1   # this $1 is the first argument to the function, not the first command line arg...
-    chown :feder $directory || color_text red "Group ownership of directory $directory not changed (should be feder group)"
-    chmod ug+w $directory || color_text red "User+group write permissions of directory $directory not changed (should be ug+w)"
-    chmod o-w $directory || color_text red "Other write permissions of directory $directory not changed (should be o-w)"    
-}
+##### FUNCTION DEFINTITIONS
 
 # function to color code text output
 
@@ -53,9 +37,34 @@ color_text () {
     echo -e $result
 }
 
+# function to set permissions on newly created directories
+
+set_write_permissions () {
+    directory=$1   # this $1 is the first argument to the function, not the first command line arg...
+    chown :feder $directory || color_text red "Group ownership of directory $directory not changed (should be feder group)"
+    chmod ug+w $directory || color_text red "User+group write permissions of directory $directory not changed (should be ug+w)"
+    chmod o-w $directory || color_text red "Other write permissions of directory $directory not changed (should be o-w)"    
+}
+
+# makes declaring a win easier...
+
 success () {
     color_text green "      Succeeded"
 }
+
+#### END FUNCTION DEFITIONS
+
+
+# Any paths list as part of sacred_paths will be checked against $data_root
+# if there is a match, the script aborts
+sacred_roots="/data/feder /Volumes/Dark_Matter/feder /home/faculty/matt.craig/sacred"
+
+for path in $sacred_roots; do
+    if [[ "$data_root" -ef "$path" ]]; then
+        echo "I REFUSE TO TOUCH ACTUAL DATA DIRECTORIES RIGHT NOW"
+        exit 1
+    fi
+done
 
 # implement item 1 from email:
 #
