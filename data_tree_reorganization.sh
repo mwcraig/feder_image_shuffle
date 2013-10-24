@@ -54,6 +54,7 @@ success () {
 
 #### END FUNCTION DEFITIONS
 
+#### CHECK WHETHER THE DATA ROOT IS ONE OF THE SACRED_PATHS
 
 # Any paths list as part of sacred_paths will be checked against $data_root
 # if there is a match, the script aborts
@@ -65,6 +66,9 @@ for path in $sacred_roots; do
         exit 1
     fi
 done
+
+
+### BEGIN IMPLEMENTATION OF ACTUAL DATA MOVEMENT
 
 # implement item 1 from email:
 #
