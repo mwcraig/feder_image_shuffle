@@ -44,7 +44,7 @@ done
 # we don't need actual archives to test removing them, we just need files with the right extensions
 fake_tgz=$(find $data_root -name \*.tgz)
 fake_zip=$(find $data_root -name \*.zip)
-fakes="$fake_zip fake_tgz"
+fakes="$fake_zip $fake_tgz"
 for fake in $fakes; do
     base=$(basename $fake)
     dest=$test_tree/ast390/$base
