@@ -62,7 +62,7 @@ sacred_roots="/data/feder /Volumes/Dark_Matter/feder /home/faculty/matt.craig/sa
 
 for path in $sacred_roots; do
     if [[ "$data_root" -ef "$path" ]]; then
-        echo "I REFUSE TO TOUCH ACTUAL DATA DIRECTORIES RIGHT NOW"
+        color_text red "I REFUSE TO TOUCH ACTUAL DATA DIRECTORIES RIGHT NOW"
         exit 1
     fi
 done
