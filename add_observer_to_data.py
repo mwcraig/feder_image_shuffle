@@ -1,9 +1,17 @@
 import os
 from argparse import ArgumentParser
+import logging
 
 from astropy.table import Table
 from msumastro import ImageFileCollection
 from msumastro.header_processing.fitskeyword import FITSKeyword
+
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
+console = logging.StreamHandler()
+fil = logging.FileHandler('adding_observer.log')
+logger.addHandler(console)
+logger.addHandler(fil)
 
 
 def obs_date(str):
@@ -51,11 +59,15 @@ def add_observer(top_of_tree, observers):
         date = obs_date(root)
         if not date:
             continue
-        print 'dir: {} and DATE: {} and observers: {}'.format(root, date,
-                                                              observers[date])
+        logging.info('Processing directory %s with observers: %s',
+                     root, observers[date])
         ic = ImageFileCollection(root, keywords=['imagetyp'])
         observer_keyword = FITSKeyword(name='observer', value=observers[date])
-        for hdr in ic.headers(clobber=True):
+        for hdr, fname in ic.headers(clobber=True, return_fname=True):
+            if ('observer' in hdr) and hdr['purged']:
+                logging.warning('Skipping file %s in %s because observer '
+                                'has already been added', fname, root)
+                continue
             observer_keyword.add_to_header(hdr, history=True)
 
 
