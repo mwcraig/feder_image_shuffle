@@ -2,3 +2,7 @@
 initial_triage
 *.pyc
 initial_all.txt
+f2n_dot_py_1.1
+from_external
+triage_post_process
+*.log
