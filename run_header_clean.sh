@@ -10,9 +10,10 @@ do
 done
 
 echo "Running scripts"
-for d in dirs
+for d in $dirs
 do
     echo "    Starting $d..."
+    cd $d
     bash ./1-whack_image_and_update_overscan.sh
     echo "    Finished $d"
 done
