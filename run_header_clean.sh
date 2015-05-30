@@ -6,7 +6,7 @@ echo "Copying scripts to..."
 for d in $dirs
 do
     echo "    $d"
-    cp 1-whack_image_and_update_overscan.sh delete_imagehw $d
+    cp 1-whack_image_and_update_overscan.sh delete_imagehw.py $d
 done
 
 echo "Running scripts"
