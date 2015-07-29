@@ -5,17 +5,20 @@
 # processing script.
 #
 
+# Set root directory once so that it doesn't need to be repeated.
+ROOT_DIR='/Users/mcraig/Documents/Data/feder-images/esne-bide-fake'
+
 # Set to the directory that should be checked for new data.
-SOURCE_ROOT='/Users/mcraig/Documents/Data/feder-images/esne-bide-fake/upload'
+SOURCE_ROOT="$ROOT_DIR/upload"
 
 # Set to the directory where processed data should land. Data will be placed
 # in a subfolder of this directory.
-STAGE_ROOT='/Users/mcraig/Documents/Data/feder-images/esne-bide-fake/staged'
+STAGE_ROOT="$ROOT_DIR/staged"
 
 # Set to the directory in which the data might have landed after staging.
 # If night exists in this directory already then the night will not be
 # reprocessed.
-PROCESS_ROOT='/Users/mcraig/Documents/Data/feder-images/esne-bide-fake/processed'
+PROCESS_ROOT="$ROOT_DIR/processed"
 
 # Set to object list on github.
 GITHUB_OBJECT_LIST=https://raw.github.com/mwcraig/feder-object-list/master/feder_object_list.csv
