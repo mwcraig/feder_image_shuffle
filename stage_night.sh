@@ -21,7 +21,7 @@ STAGE_ROOT="$ROOT_DIR/staged"
 PROCESS_ROOT="$ROOT_DIR/processed"
 
 # Set to object list on github.
-GITHUB_OBJECT_LIST='https://raw.github.com/mwcraig/feder-object-list/master/feder_object_list.csv'
+GITHUB_OBJECT_LIST=https://raw.github.com/mwcraig/feder-object-list/master/feder_object_list.csv
 
 # Check whether any nights need to be processed.
 nights_to_process=$(diff $SOURCE_ROOT $STAGE_ROOT | grep "Only in $SOURCE_ROOT" | grep -o -e '20[0-9][0-9]-[01][0-9]-[0-3][0-9]')
