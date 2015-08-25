@@ -46,7 +46,7 @@ for night in $nights_to_process; do
 #   Use run_standard_header_process.py --scripts-only to make processing script
     run_standard_header_process.py -o $GITHUB_OBJECT_LIST --scripts-only --dest-root .  $current_source
 
-#   Add "00-"" to the front of the script name. Allows scripts to be scripted.
+#   Add "00-"" to the front of the script name. Allows scripts to be ordered.
     script_name=$(ls *.sh)
     new_script_name="00-$script_name"
     mv $script_name $new_script_name
