@@ -55,5 +55,6 @@ for night in $nights_to_process; do
     bash $new_script_name || exit 1
 
 #   Trigger creation of github issue(s)?
+    python create_staging_github_issue.py $night
 
 done
