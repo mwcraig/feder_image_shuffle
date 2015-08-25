@@ -26,6 +26,8 @@ GITHUB_OBJECT_LIST=https://raw.github.com/mwcraig/feder-object-list/master/feder
 # Check whether any nights need to be processed.
 nights_to_process=$(diff $SOURCE_ROOT $STAGE_ROOT | grep "Only in $SOURCE_ROOT" | grep -o -e '20[0-9][0-9]-[01][0-9]-[0-3][0-9]')
 
+cwd=$PWD
+
 # Loop over nights to be processed.
 for night in $nights_to_process; do
     # Skip if it looks like this has already been processed.
@@ -55,6 +57,7 @@ for night in $nights_to_process; do
     bash $new_script_name || exit 1
 
 #   Trigger creation of github issue(s)?
+    cd $cwd
     python create_staging_github_issue.py $night
 
 done
