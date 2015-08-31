@@ -23,7 +23,12 @@ def main(night):
     repo.create_file(readme_path, commit_message, readme)
 
     readme_edit_url = '/'.join([repo.html_url, 'edit', 'master', readme_path])
-    issue = repo.create_issue('Examine staged data for {}'.format(night),
+    issue_title = 'Examine staged data for {}'.format(night)
+    for i in repo.issues():
+        if i.title == issue_title:
+            raise RuntimeError('Issue already exists: {}'.format(issue_title))
+
+    issue = repo.create_issue(issue_title,
                               'Click [here]({}) to edit README for this night'.format(readme_edit_url))
 
 if __name__ == '__main__':
