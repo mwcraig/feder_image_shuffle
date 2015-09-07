@@ -1,10 +1,12 @@
 from __future__ import print_function, absolute_import, unicode_literals
 
 import os
+from glob import glob
+
 from github3 import login
 
 
-def main(night):
+def main(night, path=None):
     token = os.getenv('GITHUB_TOKEN')
 
     if not token:
@@ -30,15 +32,32 @@ def main(night):
 
     readme_edit_url = '/'.join([repo.html_url, 'edit', 'master', readme_path])
 
-    issue = repo.create_issue(issue_title,
-                              'Click [here]({}) to edit README for this night'.format(readme_edit_url))
+    if path is not None:
+        needs_stuff = glob(os.path.join(path, 'NEEDS*.txt'))
+        # Do not write full path to github.
+        needs_stuff = [os.path.basename(need) for need in needs_stuff]
+
+    if needs_stuff:
+        needs_text = ('\n\nThis directory seems to need '
+                      'these things:\n+ {}').format('\n+ '.join(needs_stuff))
+    else:
+        needs_text = ''
+    issue_text = ('Click [here]({}) to edit README '
+                  'for this night'.format(readme_edit_url)) + needs_text
+
+    repo.create_issue(issue_title, issue_text)
 
 if __name__ == '__main__':
     import argparse
 
     parser = argparse.ArgumentParser()
     parser.add_argument('night', help='Night of observation as YYYY-MM-DD')
-
+    parser.add_argument('-p', '--path',
+                        help='Full path to directory containing observations',
+                        nargs=1, default=None)
     args = parser.parse_args()
+    path = args.path
+    if path:
+        path = path[0]
 
-    main(args.night)
+    main(args.night, path=path)
