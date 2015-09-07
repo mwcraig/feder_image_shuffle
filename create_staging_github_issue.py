@@ -13,6 +13,12 @@ def main(night):
     gh = login(token=token)
     repo = gh.repository('feder-observatory', 'processed_images')
 
+    # Check that whether there is already an issue for this night.
+    issue_title = 'Examine staged data for {}'.format(night)
+    for i in repo.issues():
+        if i.title == issue_title:
+            raise RuntimeError('Issue already exists: {}'.format(issue_title))
+
     # Add a skeleton README for this night
     with open('github_staging_readme_template.md', 'r') as f:
         template = f.read()
@@ -23,10 +29,6 @@ def main(night):
     repo.create_file(readme_path, commit_message, readme)
 
     readme_edit_url = '/'.join([repo.html_url, 'edit', 'master', readme_path])
-    issue_title = 'Examine staged data for {}'.format(night)
-    for i in repo.issues():
-        if i.title == issue_title:
-            raise RuntimeError('Issue already exists: {}'.format(issue_title))
 
     issue = repo.create_issue(issue_title,
                               'Click [here]({}) to edit README for this night'.format(readme_edit_url))
