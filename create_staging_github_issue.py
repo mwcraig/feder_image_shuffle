@@ -2,11 +2,28 @@ from __future__ import print_function, absolute_import, unicode_literals
 
 import os
 from glob import glob
+from time import sleep
 
 from github3 import login
 
 
-def main(night, path=None):
+def main(night, path=None, sleep_time=0.1):
+    """
+    Create a github issue for a night that has been staged.
+
+    Parameters
+    ----------
+
+    night : str
+        Date of the observation, in the form YYYY-MM-DD
+
+    path : str
+        Full path the the directory containing the staged images.
+
+    sleep_time : float
+        Amount of time to sleep after the github class to avoid hitting API
+        rate limits.
+    """
     token = os.getenv('GITHUB_TOKEN')
 
     if not token:
@@ -46,6 +63,9 @@ def main(night, path=None):
                   'for this night'.format(readme_edit_url)) + needs_text
 
     repo.create_issue(issue_title, issue_text)
+
+    # Take a brief nap to avoid getting blocked by GitHub...
+    sleep(sleep_time)
 
 if __name__ == '__main__':
     import argparse
