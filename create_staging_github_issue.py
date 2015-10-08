@@ -72,6 +72,7 @@ def main(night, path=None, sleep_time=0.1):
     labels = [label for key, label in LABELS.items()
               if key.upper() in needs_stuff]
 
+    print('LABELS ARE: ', labels)
     if labels:
         issue.add_labels(*labels)
 
