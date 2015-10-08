@@ -77,7 +77,7 @@ def main(night, path=None, sleep_time=0.1):
         issue.add_labels(*labels)
 
     for need, path in zip(needs_stuff, needs_stuff_paths):
-        with open(needs_stuff_paths, 'r') as f:
+        with open(path, 'r') as f:
             contents = f.read()
         comment_body = '## {}\n```{}```'.format(need, contents)
         issue.create_comment(comment_body)
