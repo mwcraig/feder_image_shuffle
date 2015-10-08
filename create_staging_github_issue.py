@@ -55,9 +55,9 @@ def main(night, path=None, sleep_time=0.1):
     readme_edit_url = '/'.join([repo.html_url, 'edit', 'master', readme_path])
 
     if path is not None:
-        needs_stuff = glob(os.path.join(path, 'NEEDS*.txt'))
+        needs_stuff_paths = glob(os.path.join(path, 'NEEDS*.txt'))
         # Do not write full path to github.
-        needs_stuff = [os.path.basename(need) for need in needs_stuff]
+        needs_stuff = [os.path.basename(need) for need in needs_stuff_paths]
 
     if needs_stuff:
         needs_text = ('\n\nThis directory seems to need '
@@ -69,12 +69,18 @@ def main(night, path=None, sleep_time=0.1):
 
     issue = repo.create_issue(issue_title, issue_text)
 
+    # Add labels if we need them
     labels = [label for key, label in LABELS.items()
               if key in needs_stuff]
 
-    print('LABELS ARE: ', labels)
     if labels:
         issue.add_labels(*labels)
+
+    for need, path in zip(needs_stuff, needs_stuff_paths):
+        with open(needs_stuff_paths, 'r') as f:
+            contents = f.read()
+        comment_body = '## {}\n```{}```'.format(need, contents)
+        issue.create_comment(comment_body)
 
     # Take a brief nap to avoid getting blocked by GitHub...
     sleep(sleep_time)
