@@ -80,6 +80,7 @@ def main(night, path=None, sleep_time=0.1):
         with open(path, 'r') as f:
             contents = f.read()
         comment_body = '## {}\n```{}```'.format(need, contents)
+        print(comment_body)
         issue.create_comment(comment_body)
 
     # Take a brief nap to avoid getting blocked by GitHub...
