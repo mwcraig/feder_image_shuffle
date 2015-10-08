@@ -6,6 +6,11 @@ from time import sleep
 
 from github3 import login
 
+LABELS = {
+    'astrometry': 'needs astrometry',
+    'pointing': 'needs pointing',
+    'object': 'needs object'
+}
 
 def main(night, path=None, sleep_time=0.1):
     """
@@ -62,7 +67,13 @@ def main(night, path=None, sleep_time=0.1):
     issue_text = ('Click [here]({}) to edit README '
                   'for this night'.format(readme_edit_url)) + needs_text
 
-    repo.create_issue(issue_title, issue_text)
+    issue = repo.create_issue(issue_title, issue_text)
+
+    labels = [label for key, label in LABELS.items()
+              if key.upper() in needs_stuff]
+
+    if labels:
+        issue.add_labels(*labels)
 
     # Take a brief nap to avoid getting blocked by GitHub...
     sleep(sleep_time)
