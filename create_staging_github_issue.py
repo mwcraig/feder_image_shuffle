@@ -7,9 +7,9 @@ from time import sleep
 from github3 import login
 
 LABELS = {
-    'astrometry': 'needs astrometry',
-    'pointing': 'needs pointing',
-    'object': 'needs object'
+    'NEEDS_ASTROMETRY.txt': 'needs astrometry',
+    'NEEDS_POINTING_INFO.txt': 'needs pointing',
+    'NEEDS_OBJECT_NAME.txt': 'needs object'
 }
 
 def main(night, path=None, sleep_time=0.1):
@@ -69,13 +69,8 @@ def main(night, path=None, sleep_time=0.1):
 
     issue = repo.create_issue(issue_title, issue_text)
 
-    for key, label in LABELS.items():
-        print('key is ', key)
-        print('key.upper() in needs_stuff', key.upper() in needs_stuff)
-        print('needs_stuff', needs_stuff)
-
     labels = [label for key, label in LABELS.items()
-              if key.upper() in needs_stuff]
+              if key in needs_stuff]
 
     print('LABELS ARE: ', labels)
     if labels:
