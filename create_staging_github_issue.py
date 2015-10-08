@@ -69,6 +69,11 @@ def main(night, path=None, sleep_time=0.1):
 
     issue = repo.create_issue(issue_title, issue_text)
 
+    for key, label in LABELS.items():
+        print('key is ', key)
+        print('key.upper() in needs_stuff', key.upper() in needs_stuff)
+        print('needs_stuff', needs_stuff)
+
     labels = [label for key, label in LABELS.items()
               if key.upper() in needs_stuff]
 
