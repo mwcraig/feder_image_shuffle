@@ -74,6 +74,11 @@ if __name__ == '__main__':
     if args.night:
         night = args.night
     else:
-        _, night = os.path.split(args.fits_directory)
+        if args.fits_directory.endswith('/'):
+            night = args.fits_directory[:-1]
+        else:
+            night = args.fits_directory
+
+        _, night = os.path.split(night)
 
     main(args.fits_directory, args.jpeg_dir, args.base_url, night)
