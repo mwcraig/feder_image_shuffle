@@ -62,7 +62,7 @@ if __name__ == '__main__':
                              'generate the jpegs.')
     parser.add_argument('-j', '--jpeg_dir', default='.',
                         help='Directory holding the jpeg images.')
-    parser.add_argument('-b', '--base_url', default='.',
+    parser.add_argument('-b', '--base-url', default='.',
                         help='URL to the folder holding the jpegs. The '
                              'default works if the images and the web page'
                              'are in the same folder.')
