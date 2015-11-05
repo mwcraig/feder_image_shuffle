@@ -58,6 +58,6 @@ for night in $nights_to_process; do
 
 #   Trigger creation of github issue(s)?
     cd $cwd
-    python create_staging_github_issue.py $night
+    python create_staging_github_issue.py -p $current_stage $night
 
 done
