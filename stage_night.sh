@@ -20,6 +20,9 @@ STAGE_ROOT="$ROOT_DIR/staged"
 # reprocessed.
 PROCESS_ROOT="$ROOT_DIR/processed"
 
+# Base URL for jpeg image gallery on physics server
+BASE_GALLERY_URL=http://physics.mnstate.edu/feder_gallery/
+
 # Set to object list on github.
 GITHUB_OBJECT_LIST=https://raw.github.com/mwcraig/feder-object-list/master/feder_object_list.csv
 
@@ -60,4 +63,11 @@ for night in $nights_to_process; do
     cd $cwd
     python create_staging_github_issue.py -p $current_stage $night
 
+#   Make me some jpegs, please...
+    jpeg_storage=jpegs/$night
+    mkdir -p $jpeg_storage
+    python make_images.py $current_stage $jpeg_storage
+
+#   ...and a web page to display those jpegs!
+    python make_viewer_pages.py --base-url $BASE_GALLERY_URL/$night $current_stage
 done
