@@ -50,7 +50,15 @@ def main(source_d, destination_d, thumbnail_size=150):
 
     ic = ImageFileCollection(source_d, keywords='*')
 
-    os.makedirs(destination_d)
+    try:
+        os.makedirs(destination_d)
+    except OSError as e:
+        if 'File exists' in e.strerror:
+            # Good news, directory already exists!
+            pass
+        else:
+            raise e
+
     if thumbnail_size:
         os.makedirs(os.path.join(destination_d, thumbnail_dir))
 
