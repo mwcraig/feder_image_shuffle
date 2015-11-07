@@ -12,6 +12,20 @@ LABELS = {
     'NEEDS_OBJECT_NAME.txt': 'needs object'
 }
 
+
+def add_needs_contents_to_issue(issue, needs_path):
+    """
+    Add the contents of each file in needs_path to the issue as a
+    comment.
+    """
+    for path in needs_path:
+        with open(path, 'r') as f:
+            contents = f.read()
+        need = os.path.basename(path)
+        comment_body = '## {}\n```{}```'.format(need, contents)
+        issue.create_comment(comment_body)
+
+
 def main(night, path=None, sleep_time=0.1):
     """
     Create a github issue for a night that has been staged.
@@ -76,12 +90,7 @@ def main(night, path=None, sleep_time=0.1):
     if labels:
         issue.add_labels(*labels)
 
-    for need, path in zip(needs_stuff, needs_stuff_paths):
-        with open(path, 'r') as f:
-            contents = f.read()
-        comment_body = '## {}\n```{}```'.format(need, contents)
-        print(comment_body)
-        issue.create_comment(comment_body)
+    add_needs_contents_to_issue(issue, needs_stuff_paths)
 
     # Take a brief nap to avoid getting blocked by GitHub...
     sleep(sleep_time)
