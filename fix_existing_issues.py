@@ -62,6 +62,8 @@ def main(label, fix, base_path_to_staged_images):
         for l in issue.labels():
             if l.name in [foo for foo in LABELS.values()]:
                 fixes[fix](issue, night_path, l.name)
+        # Success, so remove the label.
+        issue.remove_label(label)
 
 
 if __name__ == '__main__':
