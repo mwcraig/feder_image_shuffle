@@ -41,7 +41,6 @@ def fix_needs_contents(issue, night_path, need_label):
         raise RuntimeError('No label matching {}'.format(need_label))
 
     needs_stuff_path = os.path.join(night_path, need_file_name)
-    print(needs_stuff_path)
     add_needs_contents_to_issue(issue, [needs_stuff_path])
 
 
@@ -61,10 +60,8 @@ def main(label, fix, base_path_to_staged_images):
     for issue in repo.issues(state='open', labels=label):
         night_path = os.path.join(base_path_to_staged_images,
                                   night_from_issue(issue))
-        print(night_path)
         for l in issue.labels():
             if l.name in [foo for foo in LABELS.values()]:
-                print(l)
                 fixes[fix](issue, night_path, l.name)
 
 
