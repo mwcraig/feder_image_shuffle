@@ -1,7 +1,6 @@
 from __future__ import print_function, absolute_import, unicode_literals
 
 import os
-from glob import glob
 from time import sleep
 import argparse
 
