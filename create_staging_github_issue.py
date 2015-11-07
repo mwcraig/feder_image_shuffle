@@ -37,7 +37,7 @@ def main(night, path=None, sleep_time=0.1):
     gh = login(token=token)
     repo = gh.repository('feder-observatory', 'processed_images')
 
-    # Check that whether there is already an issue for this night.
+    # Check whether there is already an issue for this night.
     issue_title = 'Examine staged data for {}'.format(night)
     for i in repo.issues():
         if i.title == issue_title:
