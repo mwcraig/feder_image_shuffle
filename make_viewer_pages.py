@@ -52,7 +52,7 @@ def main(fits_directory, jpeg_directory, base_url, night,
                           base_url_thumb=os.path.join(base_url,
                                                       thumbnail_directory))
 
-    print(foo)
+    return foo
 
 
 if __name__ == '__main__':
@@ -81,4 +81,4 @@ if __name__ == '__main__':
 
         _, night = os.path.split(night)
 
-    main(args.fits_directory, args.jpeg_dir, args.base_url, night)
+    print(main(args.fits_directory, args.jpeg_dir, args.base_url, night))
