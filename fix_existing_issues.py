@@ -67,6 +67,7 @@ def fix_gallery(issue, staged_images_path, jpeg_base_path,
     subprocess.check_call(['rsync', '-e', 'ssh', '-av', jpeg_path,
                            server_destination])
     # Edit the body of the issue to include a link to the gallery
+    print('Adding gallery to the body of the issue...')
     body = issue.body
     body = '\n\n'.join([body, 'Image gallery for this night at: ', night_url])
     issue.edit(body=body)
