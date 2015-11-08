@@ -3,10 +3,16 @@ from __future__ import print_function, absolute_import, unicode_literals
 import os
 from time import sleep
 import argparse
+import subprocess
+import shutil
 
 from github3 import login
 
 from create_staging_github_issue import add_needs_contents_to_issue, LABELS
+import make_images
+import make_viewer_pages
+
+BASE_GALLERY_URL = 'http://physics.mnstate.edu/feder_gallery/'
 
 
 def night_from_issue(issue):
@@ -43,9 +49,31 @@ def fix_needs_contents(issue, night_path, need_label):
     add_needs_contents_to_issue(issue, [needs_stuff_path])
 
 
-def main(label, fix, base_path_to_staged_images):
-    fixes = {'needs': fix_needs_contents,
-             'gallery': None}
+def fix_gallery(issue, staged_images_path, jpeg_base_path,
+                server_destination, base_url=BASE_GALLERY_URL):
+    night = night_from_issue(issue)
+    jpeg_path = os.path.join(jpeg_base_path, night)
+    print('Making images for {}'.format(night))
+    make_images.main(staged_images_path, jpeg_path)
+    print('Making viewer page for {}'.format(night))
+    night_url = base_url + '/' + night
+    viewer_page = make_viewer_pages.main(staged_images_path, jpeg_path,
+                                         night_url, night)
+    with open(os.path.join(jpeg_path, 'index.html'), 'w') as f:
+        f.write(str(viewer_page))
+    shutil.copy('magnific-popup.css', jpeg_path)
+    shutil.copy('jquery.magnific-popup.js', jpeg_path)
+    print('Pushing jpeg and viewer page to server...')
+    subprocess.check_call(['rsync', '-e', 'ssh', '-av', jpeg_path,
+                           server_destination])
+    # Edit the body of the issue to include a link to the gallery
+    body = issue.body
+    body = '\n\n'.join([body, 'Image gallery for this night at: ', night_url])
+    issue.edit(body=body)
+
+
+def main(label, fix, base_path_to_staged_images,
+         gallery_destination=None, jpeg_destination=None):
 
     token = os.getenv('GITHUB_TOKEN')
 
@@ -61,7 +89,11 @@ def main(label, fix, base_path_to_staged_images):
                                   night_from_issue(issue))
         for l in issue.labels():
             if l.name in [foo for foo in LABELS.values()]:
-                fixes[fix](issue, night_path, l.name)
+                if fix == 'needs':
+                    fix_needs_contents(issue, night_path, l.name)
+                elif fix == 'gallery':
+                    fix_gallery(issue, night_path,
+                                jpeg_destination, gallery_destination)
         # Success, so remove the label.
         issue.remove_label(label)
 
@@ -83,6 +115,16 @@ if __name__ == '__main__':
                         'plus night name is the path to the staged images for '
                         'the night corresponding to the issue to be fixed.')
 
+    parser.add_argument('--server-uri',
+                        default='matt.craig@physics:/data/feder/gallery',
+                        help='Destination for jpeg images; will be passed '
+                             'in to rsync')
+
+    parser.add_argument('-j', '--jpeg-dir-base', default='.',
+                        help='Directory holding the jpeg images.')
+
     args = parser.parse_args()
 
-    main(args.label, args.fix, args.base_path)
+    main(args.label, args.fix, args.base_path,
+         gallery_destination=args.server_uri,
+         jpeg_destination=args.jpeg_dir_base)
