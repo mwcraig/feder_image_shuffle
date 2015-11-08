@@ -15,6 +15,16 @@ import matplotlib.image as mimg
 from msumastro import ImageFileCollection
 
 
+def mkdir_even_if_it_exists(path):
+    try:
+        os.makedirs(path)
+    except OSError as e:
+        if 'File exists' in e.strerror:
+            # Good news, directory already exists!
+            pass
+        else:
+            raise e
+
 def scale_and_downsample(data, downsample=4,
                          min_percent=20,
                          max_percent=99.5):
@@ -50,17 +60,10 @@ def main(source_d, destination_d, thumbnail_size=150):
 
     ic = ImageFileCollection(source_d, keywords='*')
 
-    try:
-        os.makedirs(destination_d)
-    except OSError as e:
-        if 'File exists' in e.strerror:
-            # Good news, directory already exists!
-            pass
-        else:
-            raise e
+    mkdir_even_if_it_exists(destination_d)
 
     if thumbnail_size:
-        os.makedirs(os.path.join(destination_d, thumbnail_dir))
+        mkdir_even_if_it_exists(os.path.join(destination_d, thumbnail_dir))
 
     for data, fname in ic.data(return_fname=True):
         scaled_data = scale_and_downsample(data)
