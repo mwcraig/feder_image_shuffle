@@ -88,13 +88,14 @@ def main(label, fix, base_path_to_staged_images,
     for issue in repo.issues(state='open', labels=label):
         night_path = os.path.join(base_path_to_staged_images,
                                   night_from_issue(issue))
-        for l in issue.labels():
-            if fix == 'needs':
+
+        if fix == 'needs':
+            for l in issue.labels():
                 if l.name in [foo for foo in LABELS.values()]:
                     fix_needs_contents(issue, night_path, l.name)
-            elif fix == 'gallery':
-                fix_gallery(issue, night_path,
-                            jpeg_destination, gallery_destination)
+        elif fix == 'gallery':
+            fix_gallery(issue, night_path,
+                        jpeg_destination, gallery_destination)
         # Success, so remove the label.
         issue.remove_label(label)
 
