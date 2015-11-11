@@ -23,6 +23,9 @@ PROCESS_ROOT="$ROOT_DIR/processed"
 # Base URL for jpeg image gallery on physics server
 BASE_GALLERY_URL=http://physics.mnstate.edu/feder_gallery/
 
+# rsync location of galleries
+RSYNC_GALLERY_DESTINATION='matt.craig@physics:/data/feder/gallery'
+
 # Set to object list on github.
 GITHUB_OBJECT_LIST=https://raw.github.com/mwcraig/feder-object-list/master/feder_object_list.csv
 
@@ -69,5 +72,10 @@ for night in $nights_to_process; do
     python make_images.py $current_stage $jpeg_storage
 
 #   ...and a web page to display those jpegs!
-    python make_viewer_pages.py --base-url $BASE_GALLERY_URL/$night $current_stage
+    python make_viewer_pages.py --base-url $BASE_GALLERY_URL/$night $current_stage > $jpeg_storage/index.html
+    cp magnific-popup.css jquery.magnific-popup.js $jpeg_storage
+
+#   Now push the gallery to the server, making extra sure that $jpeg_storage
+#   does not have a trailing slash.
+    rsync -e ssh -av ${jpeg_storage%/} $RSYNC_GALLERY_DESTINATION
 done
