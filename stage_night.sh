@@ -34,6 +34,9 @@ nights_to_process=$(diff $SOURCE_ROOT $STAGE_ROOT | grep "Only in $SOURCE_ROOT" 
 
 cwd=$PWD
 
+# Raise error immediately if the github token is not set.
+if [ -z $GITHUB_TOKEN ]; then echo "Set GITHUB_TOKEN before running."; exit 1; fi
+
 # Loop over nights to be processed.
 for night in $nights_to_process; do
     # Skip if it looks like this has already been processed.
