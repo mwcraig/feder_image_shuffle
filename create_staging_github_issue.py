@@ -26,7 +26,7 @@ def add_needs_contents_to_issue(issue, needs_path):
         issue.create_comment(comment_body)
 
 
-def main(night, path=None, sleep_time=0.1):
+def main(night, path=None, sleep_time=0.1, gallery=None):
     """
     Create a github issue for a night that has been staged.
 
@@ -48,6 +48,9 @@ def main(night, path=None, sleep_time=0.1):
     if not token:
         raise RuntimeError('Set GITHUB_TOKEN to a github token before running.')
 
+    if gallery is None:
+        gallery = ''
+
     gh = login(token=token)
     repo = gh.repository('feder-observatory', 'processed_images')
 
@@ -61,7 +64,7 @@ def main(night, path=None, sleep_time=0.1):
     with open('github_staging_readme_template.md', 'r') as f:
         template = f.read()
 
-    readme = template.format(night=night)
+    readme = template.format(night=night, image_gallery=gallery)
     readme_path = 'nights/{}-README.md'.format(night)
     commit_message = 'Add skeleton README for {}'.format(night)
     repo.create_file(readme_path, commit_message, readme)
@@ -102,6 +105,9 @@ if __name__ == '__main__':
     parser.add_argument('night', help='Night of observation as YYYY-MM-DD')
     parser.add_argument('-p', '--path',
                         help='Full path to directory containing observations',
+                        nargs=1, default=None)
+    parser.add_argument('-g', '--gallery',
+                        help='URL for image gallery',
                         nargs=1, default=None)
     args = parser.parse_args()
     path = args.path

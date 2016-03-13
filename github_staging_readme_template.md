@@ -2,6 +2,8 @@
 
 ## Reviewed by:   your_name_here
 
+## Raw image gallery: {image_gallery}
+
 ## Unusual images?
 
 Are there any images that look unusual? List the file name of any unusual images for this night here, with description:

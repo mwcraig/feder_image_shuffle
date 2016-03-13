@@ -65,9 +65,11 @@ for night in $nights_to_process; do
 #   Run processing script
     bash $new_script_name || exit 1
 
+#   Web site for image gallery
+    gallery_url=$BASE_GALLERY_URL/$night
 #   Trigger creation of github issue(s)?
     cd $cwd
-    python create_staging_github_issue.py -p $current_stage $night
+    python create_staging_github_issue.py -p $current_stage -g $gallery_url $night
 
 #   Make me some jpegs, please...
     jpeg_storage=jpegs/$night
@@ -75,7 +77,7 @@ for night in $nights_to_process; do
     python make_images.py $current_stage $jpeg_storage
 
 #   ...and a web page to display those jpegs!
-    python make_viewer_pages.py --base-url $BASE_GALLERY_URL/$night $current_stage > $jpeg_storage/index.html
+    python make_viewer_pages.py --base-url $gallery_url $current_stage > $jpeg_storage/index.html
     cp magnific-popup.css jquery.magnific-popup.js $jpeg_storage
 
 #   Now push the gallery to the server, making extra sure that $jpeg_storage
