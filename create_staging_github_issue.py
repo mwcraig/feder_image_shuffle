@@ -81,8 +81,15 @@ def main(night, path=None, sleep_time=0.1, gallery=None):
                       'these things:\n+ {}').format('\n+ '.join(needs_stuff))
     else:
         needs_text = ''
-    issue_text = ('Click [here]({}) to edit README '
-                  'for this night'.format(readme_edit_url)) + needs_text
+
+    if gallery:
+        gallery_text = '\nRaw images for this night at: {}\n'.format(gallery)
+    else:
+        gallery_text = ''
+
+    issue_text = (('Click [here]({}) to edit README '
+                  'for this night'.format(readme_edit_url)) +
+                  gallery_text + needs_text)
 
     issue = repo.create_issue(issue_title, issue_text)
 
@@ -114,4 +121,4 @@ if __name__ == '__main__':
     if path:
         path = path[0]
 
-    main(args.night, path=path)
+    main(args.night, path=path, gallery=args.gallery)
