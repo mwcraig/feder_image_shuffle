@@ -10,7 +10,7 @@
 # not provided, it defaults to 10,000, which should be effectively infinite.
 #
 
-if [[ $# -gt 1 ]]; then
+if [[ $# -gt 0 ]]; then
     max_nights=$1
 else
     max_nights=10000
@@ -58,8 +58,9 @@ for night in $nights_to_process; do
         continue
     fi
 
-    if [[ $nights_done -gt $max_nights ]]; then
+    if (( $nights_done >= $max_nights )); then
         echo "Ending because maximum number of nights done."
+        break
     fi
 
     current_stage=$STAGE_ROOT/$night
