@@ -14,6 +14,7 @@ if [[ $# -gt 1 ]]; then
     max_nights=$1
 else
     max_nights=10000
+fi
 
 
 # Set root directory once so that it doesn't need to be repeated.
