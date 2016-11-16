@@ -117,8 +117,14 @@ if __name__ == '__main__':
                         help='URL for image gallery',
                         nargs=1, default=None)
     args = parser.parse_args()
+
+    # If provided, path and gallery will be returned as a list, so get the
+    # value from the list if user has provided a value.
     path = args.path
+    gallery = args.gallery
     if path:
         path = path[0]
+    if gallery:
+        gallery = gallery[0]
 
-    main(args.night, path=path, gallery=args.gallery)
+    main(args.night, path=path, gallery=gallery)
