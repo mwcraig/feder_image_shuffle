@@ -5,6 +5,17 @@
 # processing script.
 #
 
+#
+# There is one optional argument: the maximum number of nights to process. If
+# not provided, it defaults to 10,000, which should be effectively infinite.
+#
+
+if [[ $# -gt 1 ]]; then
+    max_nights=$1
+else
+    max_nights=10000
+
+
 # Set root directory once so that it doesn't need to be repeated.
 ROOT_DIR='/Users/mcraig/Documents/Data/feder-images/esne-bide-fake'
 
@@ -37,12 +48,17 @@ cwd=$PWD
 # Raise error immediately if the github token is not set.
 if [ -z $GITHUB_TOKEN ]; then echo "Set GITHUB_TOKEN before running."; exit 1; fi
 
+nights_done=0
 # Loop over nights to be processed.
 for night in $nights_to_process; do
     # Skip if it looks like this has already been processed.
     if [ -d "$PROCESS_ROOT/$night" ]; then
         echo "Skipping night $night because already in $PROCESS_ROOT"
         continue
+    fi
+
+    if [[ $nights_done -gt $max_nights ]]; then
+        echo "Ending because maximum number of nights done."
     fi
 
     current_stage=$STAGE_ROOT/$night
@@ -83,4 +99,7 @@ for night in $nights_to_process; do
 #   Now push the gallery to the server, making extra sure that $jpeg_storage
 #   does not have a trailing slash.
     rsync -e ssh -av ${jpeg_storage%/} $RSYNC_GALLERY_DESTINATION
+
+    # increment number of nights done.
+    (( nights_done += 1 ))
 done
