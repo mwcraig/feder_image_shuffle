@@ -21,7 +21,7 @@ STAGE_ROOT="$ROOT_DIR/staged"
 PROCESS_ROOT="$ROOT_DIR/processed"
 
 # Base URL for jpeg image gallery on physics server
-BASE_GALLERY_URL=http://physics.mnstate.edu/feder_gallery/
+BASE_GALLERY_URL=http://physics.mnstate.edu/feder_gallery
 
 # rsync location of galleries
 RSYNC_GALLERY_DESTINATION='matt.craig@physics:/data/feder/gallery'
