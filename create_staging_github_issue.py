@@ -12,6 +12,8 @@ LABELS = {
     'NEEDS_OBJECT_NAME.txt': 'needs object'
 }
 
+ISSUE_NAME_BASE = 'Examine staged data for {night}'
+
 
 def add_needs_contents_to_issue(issue, needs_path):
     """
@@ -24,6 +26,26 @@ def add_needs_contents_to_issue(issue, needs_path):
         need = os.path.basename(path)
         comment_body = '## {}\n```{}```'.format(need, contents)
         issue.create_comment(comment_body)
+
+
+def get_github_repo():
+    token = os.getenv('GITHUB_TOKEN')
+
+    if not token:
+        raise RuntimeError('Set GITHUB_TOKEN to a github token before running.')
+    gh = login(token=token)
+
+    return gh.repository('feder-observatory', 'processed_images')
+
+
+def get_needs_from_disk(path):
+    if path is not None:
+        needs_stuff_paths = glob(os.path.join(path, 'NEEDS*.txt'))
+        # Do not write full path to github.
+        needs_stuff = [os.path.basename(need) for need in needs_stuff_paths]
+    else:
+        needs_stuff = []
+    return needs_stuff
 
 
 def main(night, path=None, sleep_time=0.1, gallery=None):
@@ -43,19 +65,13 @@ def main(night, path=None, sleep_time=0.1, gallery=None):
         Amount of time to sleep after the github class to avoid hitting API
         rate limits.
     """
-    token = os.getenv('GITHUB_TOKEN')
-
-    if not token:
-        raise RuntimeError('Set GITHUB_TOKEN to a github token before running.')
-
     if gallery is None:
         gallery = ''
 
-    gh = login(token=token)
-    repo = gh.repository('feder-observatory', 'processed_images')
+    repo = get_github_repo()
 
     # Check whether there is already an issue for this night.
-    issue_title = 'Examine staged data for {}'.format(night)
+    issue_title = ISSUE_NAME_BASE.format(night=night)
     for i in repo.issues():
         if i.title == issue_title:
             raise RuntimeError('Issue already exists: {}'.format(issue_title))
@@ -71,10 +87,7 @@ def main(night, path=None, sleep_time=0.1, gallery=None):
 
     readme_edit_url = '/'.join([repo.html_url, 'edit', 'master', readme_path])
 
-    if path is not None:
-        needs_stuff_paths = glob(os.path.join(path, 'NEEDS*.txt'))
-        # Do not write full path to github.
-        needs_stuff = [os.path.basename(need) for need in needs_stuff_paths]
+    needs_stuff = get_needs_from_disk(path)
 
     if needs_stuff:
         needs_text = ('\n\nThis directory seems to need '
@@ -100,22 +113,29 @@ def main(night, path=None, sleep_time=0.1, gallery=None):
     if labels:
         issue.add_labels(*labels)
 
+    needs_stuff_paths = [os.path.join(path, need) for need in needs_stuff]
     add_needs_contents_to_issue(issue, needs_stuff_paths)
 
     # Take a brief nap to avoid getting blocked by GitHub...
     sleep(sleep_time)
 
-if __name__ == '__main__':
-    import argparse
 
-    parser = argparse.ArgumentParser()
+def add_arguments(parser, include_gallery_option=True):
     parser.add_argument('night', help='Night of observation as YYYY-MM-DD')
     parser.add_argument('-p', '--path',
                         help='Full path to directory containing observations',
                         nargs=1, default=None)
-    parser.add_argument('-g', '--gallery',
-                        help='URL for image gallery',
-                        nargs=1, default=None)
+    if include_gallery_option:
+        parser.add_argument('-g', '--gallery',
+                            help='URL for image gallery',
+                            nargs=1, default=None)
+
+
+if __name__ == '__main__':
+    import argparse
+
+    parser = argparse.ArgumentParser()
+    add_arguments(parser)
     args = parser.parse_args()
 
     # If provided, path and gallery will be returned as a list, so get the
