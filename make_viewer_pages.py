@@ -12,7 +12,7 @@ def construct_image_title(filename, header):
     title = ''
 
     if header['imagetyp'] == 'LIGHT' or header['imagetyp'] == 'FLAT':
-        title = '   '.join([title, 'Filter:', header['filter']])
+        title = '   '.join([title, 'Filter:', header.get('filter', 'UNKNOWN')])
 
     title = ' '.join([title, 'Exposure: ', str(header['exposure'])])
 
