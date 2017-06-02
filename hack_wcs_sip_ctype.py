@@ -28,7 +28,7 @@ def fix_headers(folder):
 
     files = ic.files_filtered(ctype1='RA---TAN')
 
-    if not files:
+    if not len(files):
         print('No files to fix in {}'.format(folder))
 
     for file in files:
