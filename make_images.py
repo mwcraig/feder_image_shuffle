@@ -8,7 +8,7 @@ import numpy as np
 
 from skimage.measure import block_reduce
 
-from astropy.visualization import scale_image
+from astropy.visualization import simple_norm  # scale_image
 
 import matplotlib.image as mimg
 
@@ -25,18 +25,21 @@ def mkdir_even_if_it_exists(path):
         else:
             raise e
 
+
 def scale_and_downsample(data, downsample=4,
                          min_percent=20,
                          max_percent=99.5):
 
-    scaled_data = scale_image(data,
-                              min_percent=min_percent,
-                              max_percent=max_percent)
+    scaled_data = data
 
     if downsample > 1:
         scaled_data = block_reduce(scaled_data,
                                    block_size=(downsample, downsample))
-    return scaled_data
+    norm = simple_norm(scaled_data,
+                       min_percent=min_percent,
+                       max_percent=max_percent)
+
+    return norm(scaled_data)
 
 
 def main(source_d, destination_d, thumbnail_size=150):
