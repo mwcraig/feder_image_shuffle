@@ -37,7 +37,11 @@ def main(fits_directory, jpeg_directory, base_url, night,
         images = []
         for header, fname in ic.headers(imagetyp=group, return_fname=True):
             f = os.path.basename(fname)
-            images.append({'jpeg_name': f.replace('.fit', '.jpg'),
+            # Try replacing all the extensions with jpg...
+            jpeg_name = (f.replace('.fit', '.jpg')
+                          .replace('.fts', '.jpg')
+                          .replace('.fits', '.jpg'))
+            images.append({'jpeg_name': jpeg_name,
                            'title': construct_image_title(f, header),
                            'original_name': f})
         image_groups[group] = images
