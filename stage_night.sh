@@ -95,7 +95,7 @@ for night in $nights_to_process; do
     python make_images.py $current_stage $jpeg_storage
 
 #   ...and a web page to display those jpegs!
-    python make_viewer_pages.py --base-url $gallery_url $current_stage > $jpeg_storage/index.html
+    python make_viewer_pages.py $current_stage > $jpeg_storage/index.html
     cp magnific-popup.css jquery.magnific-popup.js $jpeg_storage
 
 #   Now push the gallery to the server, making extra sure that $jpeg_storage
