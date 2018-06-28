@@ -80,8 +80,18 @@ for night in $nights_to_process; do
     new_script_name="00-$script_name"
     mv $script_name $new_script_name
 
+#   Rename any .fts files to .fit. Not strictly necessary but I
+#   like consistency.
+#   Copied this like a boss from https://askubuntu.com/a/35994
+
+    echo 'find $current_stage -depth -name "*.fts" -exec sh -c 'mv "$1" "${1%.fts}.fit"' _ {} \;' >> $new_script_name
+
 #   Run processing script
     bash $new_script_name || exit 1
+
+#   Copy over any files that did not get moved by the script
+    rsync -avu $current_source $current_stage
+
 
 #   Web site for image gallery
     gallery_url=$BASE_GALLERY_URL/$night
