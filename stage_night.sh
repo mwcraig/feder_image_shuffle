@@ -73,7 +73,7 @@ for night in $nights_to_process; do
     cd $current_stage
 
 #   Use run_standard_header_process.py --scripts-only to make processing script
-    run_standard_header_process.py -o $GITHUB_OBJECT_LIST --scripts-only --dest-root .  $current_source
+    run_standard_header_process.py -o $GITHUB_OBJECT_LIST --ignore-fits-ra-dec --scripts-only --dest-root .  $current_source
 
 #   Add "00-"" to the front of the script name. Allows scripts to be ordered.
     script_name=$(ls *.sh)
