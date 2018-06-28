@@ -84,8 +84,10 @@ for night in $nights_to_process; do
 #   like consistency.
 #   Copied this like a boss from https://askubuntu.com/a/35994
 
-    echo 'find $current_stage -depth -name "*.fts" -exec sh -c 'mv "$1" "${1%.fts}.fit"' _ {} \;' >> $new_script_name
-
+    (cat << 'EndCopy'
+    find . -depth -name "*.fts" -exec sh -c 'mv "$1" "${1%.fts}.fit"' _ {} \;
+EndCopy
+) >> $new_script_name
 #   Run processing script
     bash $new_script_name || exit 1
 
