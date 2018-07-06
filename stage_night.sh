@@ -91,8 +91,9 @@ EndCopy
 #   Run processing script
     bash $new_script_name || exit 1
 
-#   Copy over any files that did not get moved by the script
-    rsync -avu $current_source $current_stage
+#   Copy over any files that did not get moved by the script.
+#   That trailing slash is *critical*, incidentally.
+    rsync -avu $current_source/ $current_stage
 
 
 #   Web site for image gallery
