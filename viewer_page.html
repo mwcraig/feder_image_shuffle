@@ -15,7 +15,7 @@
     <script src="./jquery.magnific-popup.js"></script>
 
     <h1>{{ night }}</h1>
-    {% for group, images in image_groups.iteritems() %}
+    {% for group, images in image_groups.items() %}
         <h2>{{ group }}</h2>
         <div class='popup-gallery'>
             {% for image in images %}
