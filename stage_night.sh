@@ -18,7 +18,7 @@ fi
 
 
 # Set root directory once so that it doesn't need to be repeated.
-ROOT_DIR='/Users/mcraig/Documents/Data/feder-images/esne-bide-fake'
+ROOT_DIR='/data/feder/data'
 
 # Set to the directory that should be checked for new data.
 SOURCE_ROOT="$ROOT_DIR/upload"
@@ -36,7 +36,7 @@ PROCESS_ROOT="$ROOT_DIR/processed"
 BASE_GALLERY_URL=http://physics.mnstate.edu/feder_gallery
 
 # rsync location of galleries
-RSYNC_GALLERY_DESTINATION='matt.craig@physics:/data/feder/gallery'
+RSYNC_GALLERY_DESTINATION='/data/feder/gallery'
 
 # Set to object list on github.
 GITHUB_OBJECT_LIST=https://raw.github.com/mwcraig/feder-object-list/master/feder_object_list.csv
@@ -72,29 +72,26 @@ for night in $nights_to_process; do
 #   Change to that directory.
     cd $current_stage
 
+
+#   Copy over any files that did not get moved by the script.
+#   That trailing slash is *critical*, incidentally.
+    rsync -avu $current_source/ $current_stage
+
+#   Fix file names by:
+#       - changing any spaces to dashes
+#       - changing any .fts file names to .fit for consistency
+    python $cwd/rename.py
+
 #   Use run_standard_header_process.py --scripts-only to make processing script
-    run_standard_header_process.py -o $GITHUB_OBJECT_LIST --ignore-fits-ra-dec --scripts-only --dest-root .  $current_source
+    run_standard_header_process.py -o $GITHUB_OBJECT_LIST --ignore-fits-ra-dec --scripts-only --dest-root .  .
 
 #   Add "00-"" to the front of the script name. Allows scripts to be ordered.
     script_name=$(ls *.sh)
     new_script_name="00-$script_name"
     mv $script_name $new_script_name
 
-#   Rename any .fts files to .fit. Not strictly necessary but I
-#   like consistency.
-#   Copied this like a boss from https://askubuntu.com/a/35994
-
-    (cat << 'EndCopy'
-    find . -depth -name "*.fts" -exec sh -c 'mv "$1" "${1%.fts}.fit"' _ {} \;
-EndCopy
-) >> $new_script_name
 #   Run processing script
     bash $new_script_name || exit 1
-
-#   Copy over any files that did not get moved by the script.
-#   That trailing slash is *critical*, incidentally.
-    rsync -avu $current_source/ $current_stage
-
 
 #   Web site for image gallery
     gallery_url=$BASE_GALLERY_URL/$night
@@ -113,7 +110,7 @@ EndCopy
 
 #   Now push the gallery to the server, making extra sure that $jpeg_storage
 #   does not have a trailing slash.
-    rsync -e ssh -av ${jpeg_storage%/} $RSYNC_GALLERY_DESTINATION
+    rsync -av ${jpeg_storage%/} $RSYNC_GALLERY_DESTINATION
 
     # increment number of nights done.
     (( nights_done += 1 ))
