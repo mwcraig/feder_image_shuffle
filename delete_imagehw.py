@@ -1,4 +1,4 @@
-from msumastro import ImageFileCollection
+from ccdproc import ImageFileCollection
 
 
 def delete_keys():

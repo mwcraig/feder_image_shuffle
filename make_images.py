@@ -12,7 +12,7 @@ from astropy.visualization import simple_norm  # scale_image
 
 import matplotlib.image as mimg
 
-from msumastro import ImageFileCollection
+from ccdproc import ImageFileCollection
 
 
 def mkdir_even_if_it_exists(path):

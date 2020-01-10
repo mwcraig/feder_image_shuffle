@@ -3,7 +3,7 @@ from argparse import ArgumentParser
 import logging
 
 from astropy.table import Table
-from msumastro import ImageFileCollection
+from ccdproc import ImageFileCollection
 from msumastro.header_processing.fitskeyword import FITSKeyword
 
 logger = logging.getLogger()

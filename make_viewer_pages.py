@@ -5,7 +5,7 @@ import os
 import argparse
 
 import jinja2
-from msumastro import ImageFileCollection
+from ccdproc import ImageFileCollection
 
 
 def construct_image_title(filename, header):
