@@ -37,7 +37,8 @@ def scale_and_downsample(data, downsample=4,
                                    block_size=(downsample, downsample))
     norm = simple_norm(scaled_data,
                        min_percent=min_percent,
-                       max_percent=max_percent)
+                       max_percent=max_percent,
+                       clip=True)
 
     return norm(scaled_data)
 
