@@ -83,7 +83,7 @@ for night in $nights_to_process; do
     python $cwd/rename.py
 
 #   Use run_standard_header_process.py --scripts-only to make processing script
-    run_standard_header_process.py --overwrite-source -o $GITHUB_OBJECT_LIST --ignore-fits-ra-dec --scripts-only  .
+    run_standard_header_process.py --overwrite-source -o $GITHUB_OBJECT_LIST --ignore-fits-ra-dec --scripts-only --no-source-extractor --additional-astrometry-args="--downsample 4" .
 
 #   Add "00-"" to the front of the script name. Allows scripts to be ordered.
     script_name=$(ls *.sh)
