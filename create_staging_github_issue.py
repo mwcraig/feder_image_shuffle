@@ -85,7 +85,7 @@ def main(night, path=None, sleep_time=0.1, gallery=None):
     commit_message = 'Add skeleton README for {}'.format(night)
     repo.create_file(readme_path, commit_message, readme.encode('utf-8'))
 
-    readme_edit_url = '/'.join([repo.html_url, 'edit', 'master', readme_path])
+    readme_edit_url = '/'.join([repo.html_url, 'edit', 'main', readme_path])
 
     needs_stuff = get_needs_from_disk(path)
 
