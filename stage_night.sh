@@ -16,7 +16,6 @@ else
     max_nights=10000
 fi
 
-
 # Set root directory once so that it doesn't need to be repeated.
 ROOT_DIR='/data/feder/data'
 
@@ -48,6 +47,8 @@ cwd=$PWD
 
 # Raise error immediately if the github token is not set.
 if [ -z $GITHUB_TOKEN ]; then echo "Set GITHUB_TOKEN before running."; exit 1; fi
+
+echo "Nights $nights_to_process"
 
 nights_done=0
 # Loop over nights to be processed.
