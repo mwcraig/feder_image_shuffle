@@ -120,7 +120,7 @@ class InfoTree(Table):
         input_columns = table.colnames
         input_columns.append(self._data_source_colname)
         if input_columns != self._pending_colnames.keys():
-            raise(ValueError,
+            raise ValueError(
                   'Column names do not match in {}'.format(data_path))
         for column in table.colnames:
             self._pending_colnames[column].extend(list(table[column]))
