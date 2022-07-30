@@ -14,7 +14,7 @@ readme_name=$night-README.md
 pushd $STAGED/$night || exit 1
 
 # Grab the README from github
-curl -o $readme_name $README_BASE/$readme_name
+wget $README_BASE/$readme_name
 
 popd
 
