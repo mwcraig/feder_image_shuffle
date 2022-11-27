@@ -1,0 +1,6 @@
+astro310:
+  - python=3.10
+  - msumastro
+  - jinja2
+  - github3.py
+  - matplotlib
