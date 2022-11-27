@@ -19,5 +19,5 @@ export PATH="/usr/local/astrometry/bin:$PATH"
 echo PATH is $PATH
 echo solve-field at $(which solve-field)
 
-bash stage_night.sh 7 &> run_staging_$now.txt
+bash stage_night.sh 7 &>> run_staging_$now.txt
 
