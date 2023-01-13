@@ -47,12 +47,8 @@ isodate = now.date().isoformat()
 isotime = now.time().isoformat()
 stamp = now.timestamp()
 
-print(stamp)
-#print(isodate, isotime, bad_radio, pos_str, pos_angle, s1, s2, s3, D1, D2)
-
 try:
     data = Table.read(FILE)
-    print(data['radio'].dtype)
 except FileNotFoundError:
     names = ["date", "time", "radio", "pos string", "azimuth", "stat1", "stat2", "stat3", "D1", "D2"]
     data = Table(
@@ -61,7 +57,5 @@ except FileNotFoundError:
     )
 else:
     data.add_row([isodate, isotime] + dome_data, mask=mask)
-
-print(data)
 
 data.write(FILE, overwrite=True)

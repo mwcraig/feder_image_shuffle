@@ -7,7 +7,6 @@
 
 source ~/miniconda3/etc/profile.d/conda.sh
 conda activate astro310
-conda info
 
 cd ~/feder_image_shuffle
 
