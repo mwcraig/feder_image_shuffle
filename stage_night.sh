@@ -76,10 +76,15 @@ for night in $nights_to_process; do
 #   That trailing slash is *critical*, incidentally.
     rsync -avu $current_source/ $current_stage
 
+#   Change to the staged directory.
+    cd $current_stage
+
 #   Fix file names by:
 #       - changing any spaces to dashes
 #       - changing any .fts file names to .fit for consistency
     python $cwd/rename.py
+
+    cd $cwd
 
 ### Build image gallery
 
