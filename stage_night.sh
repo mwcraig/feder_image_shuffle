@@ -70,9 +70,6 @@ for night in $nights_to_process; do
 #   Create destination directory in staged
     mkdir $current_stage || exit 1
 
-#   Change to that directory.
-    cd $current_stage
-
 ### Copy files and fix the names
 
 #   Copy over any files that did not get moved by the script.
@@ -103,6 +100,9 @@ for night in $nights_to_process; do
     rsync -av ${jpeg_storage%/} $RSYNC_GALLERY_DESTINATION
 
 ### Patch the headers, do astrometry, etc
+
+#   Change to the staged directory.
+    cd $current_stage
 
 #   Use run_standard_header_process.py --scripts-only to make processing script
     run_standard_header_process.py --overwrite-source -o $GITHUB_OBJECT_LIST --ignore-fits-ra-dec --scripts-only --no-source-extractor --additional-astrometry-args="--downsample 4" .
