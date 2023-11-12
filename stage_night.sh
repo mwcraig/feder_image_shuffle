@@ -73,6 +73,7 @@ for night in $nights_to_process; do
 #   Change to that directory.
     cd $current_stage
 
+### Copy files and fix the names
 
 #   Copy over any files that did not get moved by the script.
 #   That trailing slash is *critical*, incidentally.
@@ -83,22 +84,10 @@ for night in $nights_to_process; do
 #       - changing any .fts file names to .fit for consistency
     python $cwd/rename.py
 
-#   Use run_standard_header_process.py --scripts-only to make processing script
-    run_standard_header_process.py --overwrite-source -o $GITHUB_OBJECT_LIST --ignore-fits-ra-dec --scripts-only --no-source-extractor --additional-astrometry-args="--downsample 4" .
-
-#   Add "00-"" to the front of the script name. Allows scripts to be ordered.
-    script_name=$(ls *.sh)
-    new_script_name="00-$script_name"
-    mv $script_name $new_script_name
-
-#   Run processing script
-    bash $new_script_name || exit 1
+### Build image gallery
 
 #   Web site for image gallery
     gallery_url=$BASE_GALLERY_URL/$night
-#   Trigger creation of github issue(s)?
-    cd $cwd
-    python create_staging_github_issue.py -p $current_stage -g $gallery_url $night
 
 #   Make me some jpegs, please...
     jpeg_storage=jpegs/$night
@@ -113,6 +102,23 @@ for night in $nights_to_process; do
 #   does not have a trailing slash.
     rsync -av ${jpeg_storage%/} $RSYNC_GALLERY_DESTINATION
 
-    # increment number of nights done.
+### Patch the headers, do astrometry, etc
+
+#   Use run_standard_header_process.py --scripts-only to make processing script
+    run_standard_header_process.py --overwrite-source -o $GITHUB_OBJECT_LIST --ignore-fits-ra-dec --scripts-only --no-source-extractor --additional-astrometry-args="--downsample 4" .
+
+#   Add "00-"" to the front of the script name. Allows scripts to be ordered.
+    script_name=$(ls *.sh)
+    new_script_name="00-$script_name"
+    mv $script_name $new_script_name
+
+#   Run processing script
+    bash $new_script_name || exit 1
+
+### Trigger creation of github issue
+    cd $cwd
+    python create_staging_github_issue.py -p $current_stage -g $gallery_url $night
+
+### increment number of nights done.
     (( nights_done += 1 ))
 done
