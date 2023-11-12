@@ -22,7 +22,7 @@ def main():
     raw = Path('/data2/feder/data/raw')
     raw_nights = [p.stem for p in raw.glob('????-??-??')]
 
-    for night in up_nights[:1]:
+    for night in up_nights:
 
         if (night.stem in proc_nights) and (night not in raw_nights):
             print(f"Moving night {night}")
