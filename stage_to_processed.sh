@@ -3,7 +3,7 @@
 BASE=/data/feder/data
 STAGED=$BASE/staged
 PROCESSED=$BASE/processed
-README_BASE=https://raw.githubusercontent.com/feder-observatory/processed_images/master/nights/
+README_BASE=https://raw.githubusercontent.com/feder-observatory/processed_images/main/nights/
 
 # Remove trailing slash from night if it is present. If this is not done then the rsync later
 # on will move the files, not the directory.
