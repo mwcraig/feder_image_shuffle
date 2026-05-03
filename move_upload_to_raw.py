@@ -4,7 +4,7 @@ from pathlib import Path
 import shutil
 
 
-def main():
+def main(args):
     """
     Move every directory that is in upload and processed but not
     in raw to the folder raw.
@@ -15,7 +15,11 @@ def main():
     upload = Path('/data/feder/data/upload')
     up_nights = sorted(upload.glob('????-??-??'))
 
-    processed = Path('/data/feder/data/processed')
+    if args.staged:
+        processed = Path('/data/feder/data/staged')
+    else:
+        processed = Path('/data/feder/data/processed')
+
     proc_globs = processed.glob('????-??-??')
     proc_nights = [p.stem for p in proc_globs]
 
@@ -42,5 +46,7 @@ def main():
 if __name__ == '__main__':
     # No arguments, but add a description at least
     parser = ArgumentParser(description=main.__doc__, add_help=True)
+    parser.add_argument("--staged", action="store_true", 
+                        help="Move files that have been staged from upload to raw")
     args = parser.parse_args()
-    main()
+    main(args)
