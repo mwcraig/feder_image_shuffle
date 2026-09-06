@@ -69,26 +69,26 @@ Do this once the msumastro release that registers the new software version
 
    The last section of the output lists the night directories to re-run.
 
-3. Re-run patching and triage in each of those directories. These are the
-   same commands ``stage_night.sh`` generates, so the results match a normal
-   night:
+3. Re-run the processing script ``stage_night.sh`` generated in each of
+   those directories, so the results match a normal night:
 
        cd /uncalibrated/YYYY-MM-DD    # or /raw/staged/YYYY-MM-DD
-       run_patch.py -v --destination-dir . --object-list https://raw.github.com/feder-observatory/feder-object-list/master/feder_object_list.csv .
-       run_triage.py -v --destination-dir . --all .
+       bash 00-header_process_script.sh
 
-   Re-patching is safe on files that were already patched: keywords that
-   were previously purged are not purged again, and the other keywords are
-   simply rewritten. Files that already have a WCS keep it. If
-   ``run_patch.py`` skips files because of a software version or instrument
-   not yet in ``feder.py`` it exits nonzero and lists them in
+   Every step in the script is safe to repeat. Re-patching files that were
+   already patched does not purge keywords again, it just rewrites the
+   others. ``run_astrometry.py`` skips LIGHT frames that already have a
+   WCS, so only frames that were never solved are attempted. Triage rewrites
+   ``Manifest.txt``, and the script's final block re-patches and re-triages
+   if the first pass produced ``NEEDS_POINTING_INFO.txt``.
+
+   If ``run_patch.py`` skips files because of a software version or
+   instrument not yet in ``feder.py`` it exits nonzero and lists them in
    ``NEEDS_PATCHING.txt``; ``run_patch_error.log`` has the details. Note
    that ``run_triage.py`` fails outright on a night that still contains
-   such files, so the manifest is not refreshed for that night.
-
-   Nights that were never given astrometry because patching aborted can be
-   solved afterwards with the ``run_astrometry.py`` line from that night's
-   ``00-header_process_script.sh``.
+   such files, so the manifest is not refreshed for that night. Files that
+   are not valid FITS (the scanner reports them as ``error``) stop
+   ``run_patch.py`` too; move them into ``bad/`` first.
 
 4. Confirm with a second scan. Triage has just rewritten the manifests, so
    the default (manifest) mode is current, except for nights where triage
