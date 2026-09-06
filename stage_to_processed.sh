@@ -1,8 +1,7 @@
 #!/usr/bin/bash
 
-BASE=/data/feder/data
-STAGED=$BASE/staged
-PROCESSED=$BASE/processed
+STAGED=/raw/staged
+PROCESSED=/uncalibrated
 README_BASE=https://raw.githubusercontent.com/feder-observatory/processed_images/main/nights/
 
 # Remove trailing slash from night if it is present. If this is not done then the rsync later
@@ -18,7 +17,7 @@ wget $README_BASE/$readme_name
 
 popd
 
-pushd $BASE || exit 1
+pushd $PROCESSED || exit 1
 
 # Move the night
-mv staged/$night processed/ || exit 1
+mv $STAGED/$night . || exit 1

@@ -16,26 +16,23 @@ else
     max_nights=10000
 fi
 
-# Set root directory once so that it doesn't need to be repeated.
-ROOT_DIR='/data/feder/data'
-
 # Set to the directory that should be checked for new data.
-SOURCE_ROOT="$ROOT_DIR/upload"
+SOURCE_ROOT="/raw/images"
 
 # Set to the directory where processed data should land. Data will be placed
 # in a subfolder of this directory.
-STAGE_ROOT="$ROOT_DIR/staged"
+STAGE_ROOT="/raw/staged"
 
 # Set to the directory in which the data might have landed after staging.
 # If night exists in this directory already then the night will not be
 # reprocessed.
-PROCESS_ROOT="$ROOT_DIR/processed"
+PROCESS_ROOT="/uncalibrated"
 
 # Base URL for jpeg image gallery on physics server
 BASE_GALLERY_URL=http://physics.mnstate.edu/feder_gallery
 
 # rsync location of galleries
-RSYNC_GALLERY_DESTINATION='/data/feder/gallery'
+RSYNC_GALLERY_DESTINATION='/raw/gallery'
 
 # Set to object list on github.
 GITHUB_OBJECT_LIST=https://raw.github.com/feder-observatory/feder-object-list/master/feder_object_list.csv
