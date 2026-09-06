@@ -24,9 +24,9 @@ def update_issue(repo, night=None, path=None, sleep_time=0.1):
 
     issue_name = ISSUE_NAME_BASE.format(night=night)
 
-    issue = repo_issues[issue_name]
-    if issue_name not in repo_issues.keys():
+    if issue_name not in repo_issues:
         raise RuntimeError("No open issue for night {}".format(night))
+    issue = repo_issues[issue_name]
 
     needs = get_needs_from_disk(path)
 
@@ -34,13 +34,15 @@ def update_issue(repo, night=None, path=None, sleep_time=0.1):
     labels = [label for key, label in LABELS.items()
               if key in needs]
 
-    if set(labels) == set(label.name for label in issue.labels()):
+    current = set(label.name for label in issue.labels())
+    if set(labels) == current:
         # Nothing to do, so return
         print('Nothing to do for night {}'.format(night))
         return
 
-    # Remove any needs labels present on this issue...
-    for label in LABELS.values():
+    # Remove any needs labels present on this issue (removing one that is
+    # not present is an error)...
+    for label in set(LABELS.values()) & current:
         issue.remove_label(label)
 
     # ...then add labels for the current needs...

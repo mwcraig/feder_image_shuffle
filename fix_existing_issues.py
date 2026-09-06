@@ -118,7 +118,7 @@ if __name__ == '__main__':
                         'the night corresponding to the issue to be fixed.')
 
     parser.add_argument('--server-uri',
-                        default='matt.craig@physics:/data/feder/gallery',
+                        default='/raw/gallery',
                         help='Destination for jpeg images; will be passed '
                              'in to rsync')
 

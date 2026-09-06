@@ -48,6 +48,7 @@ if [ -z $GITHUB_TOKEN ]; then echo "Set GITHUB_TOKEN before running."; exit 1; f
 echo "Nights $nights_to_process"
 
 nights_done=0
+any_failed=0
 # Loop over nights to be processed.
 for night in $nights_to_process; do
     # Skip if it looks like this has already been processed.
@@ -107,20 +108,23 @@ for night in $nights_to_process; do
     cd $current_stage
 
 #   Use run_standard_header_process.py --scripts-only to make processing script
-    run_standard_header_process.py --overwrite-source -o $GITHUB_OBJECT_LIST --ignore-fits-ra-dec --scripts-only --no-source-extractor --additional-astrometry-args="--downsample 4" .
+    run_standard_header_process.py --overwrite-source -o $GITHUB_OBJECT_LIST --ignore-fits-ra-dec --scripts-only --no-source-extractor --additional-astrometry-args="--downsample 4" . || exit 1
 
 #   Add "00-"" to the front of the script name. Allows scripts to be ordered.
-    script_name=$(ls *.sh)
+    script_name=$(ls *.sh) || { echo "No processing script was generated for $night"; exit 1; }
     new_script_name="00-$script_name"
     mv $script_name $new_script_name
 
 #   Run processing script
-    bash $new_script_name || exit 1
+    bash $new_script_name || { echo "Header processing reported failures for $night; see *_error.log in $current_stage"; any_failed=1; }
+    [ -e NEEDS_PATCHING.txt ] && { echo "Some files in $night could not be patched; see NEEDS_PATCHING.txt in $current_stage"; any_failed=1; }
 
 ### Trigger creation of github issue
     cd $cwd
-    python create_staging_github_issue.py -p $current_stage -g $gallery_url $night
+    python create_staging_github_issue.py -p $current_stage -g $gallery_url $night || any_failed=1
 
 ### increment number of nights done.
     (( nights_done += 1 ))
 done
+
+exit $any_failed

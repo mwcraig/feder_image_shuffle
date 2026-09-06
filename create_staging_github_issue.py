@@ -6,10 +6,12 @@ from time import sleep
 
 from github3 import login
 
+# Each label must exist on the feder-observatory/processed_images GitHub repo.
 LABELS = {
     'NEEDS_ASTROMETRY.txt': 'needs astrometry',
     'NEEDS_POINTING_INFO.txt': 'needs pointing',
-    'NEEDS_OBJECT_NAME.txt': 'needs object'
+    'NEEDS_OBJECT_NAME.txt': 'needs object',
+    'NEEDS_PATCHING.txt': 'needs patching'
 }
 
 ISSUE_NAME_BASE = 'Examine staged data for {night}'
