@@ -35,7 +35,7 @@ BASE_GALLERY_URL=http://physics.mnstate.edu/feder_gallery
 RSYNC_GALLERY_DESTINATION='/raw/gallery'
 
 # Set to object list on github.
-GITHUB_OBJECT_LIST=https://raw.github.com/feder-observatory/feder-object-list/master/feder_object_list.csv
+GITHUB_OBJECT_LIST=https://raw.githubusercontent.com/feder-observatory/acp-plans/main/feder_object_list.csv
 
 # Check whether any nights need to be processed.
 nights_to_process=$(diff $SOURCE_ROOT $STAGE_ROOT | grep "Only in $SOURCE_ROOT" | grep -o -e '20[0-9][0-9]-[01][0-9]-[0-3][0-9]' | sort -r)
